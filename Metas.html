@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minhas Metas 💸</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: blue;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+    .meta {
+      background-color: rgba(0,0,0,0.2);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .progresso {
+      background: #444;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 20px;
+      margin-top: 10px;
+    }
+    .barra {
+      background: lime;
+      height: 100%;
+      width: 0%;
+      transition: 0.5s;
+    }
+  </style>
+</head>
+<body>
+  <h1>💰 Metas Financeiras</h1>
+  <p id="hoje"></p>  <div class="meta">
+    <h2>🎁 Presente mãe (R$70)</h2>
+    <p>Você já tem: R$<span id="metaAmiga"></span> / 70</p>
+    <div class="progresso"><div class="barra" id="barraAmiga"></div></div>
+  </div>  <div class="meta">
+    <h2>🕹️ Just Dance 2026 (R$250)</h2>
+    <p>Você já tem: R$<span id="metaJD"></span> / 250</p>
+    <div class="progresso"><div class="barra" id="barraJD"></div></div>
+  </div>  <div class="meta">
+    <h2>🎄 Presentes de Natal (R$300)</h2>
+    <p>Você já tem: R$<span id="metaNatal"></span> / 300</p>
+    <div class="progresso"><div class="barra" id="barraNatal"></div></div>
+  </div>  <script>
+    const dataInicio = new Date("2025-08-05"); // Começa a contar a partir dessa data (amanhã)
+    const hoje = new Date();
+    document.getElementById("hoje").innerText = `Hoje é ${hoje.toLocaleDateString()}`;
+
+    let diasEconomizados = 0;
+    let dataAtual = new Date(dataInicio);
+
+    while (dataAtual <= hoje) {
+      const diaSemana = dataAtual.getDay();
+      if (diaSemana === 1 || diaSemana === 5) {
+        diasEconomizados++;
+      }
+      dataAtual.setDate(dataAtual.getDate() + 1);
+    }
+
+    const totalEconomizado = diasEconomizados * 11; // 25 - 7 = R$18 líquido por dia de almoço com salgado
+
+    // Distribuição dos valores
+    let amiga = 39;
+    let restante = totalEconomizado;
+
+    if (restante + amiga >= 70) {
+      restante -= (70 - amiga);
+      amiga = 70;
+    } else {
+      amiga += restante;
+      restante = 0;
+    }
+
+    let jd = Math.min(restante, 250);
+    restante -= jd;
+
+    let natal = Math.min(restante, 300);
+
+    // Atualiza na tela
+    function atualizar(id, valor, maximo) {
+      document.getElementById(id).innerText = valor;
+      const barra = document.getElementById("barra" + id.charAt(0).toUpperCase() + id.slice(1));
+      barra.style.width = `${(valor / maximo) * 100}%`;
+    }
+
+    atualizar("metaAmiga", amiga, 70);
+    atualizar("metaJD", jd, 250);
+    atualizar("metaNatal", natal, 300);
+  </script></body>
+</html>
